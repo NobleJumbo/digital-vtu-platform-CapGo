@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: sans-serif;
+  background: #f8fafc;
+}
+
+.register-page{
+  min-height: 100vh;
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.register-container{
+  width: 100%;
+  max-width: 800px;
+}
+
+.logo-section{
+  text-align: center;
+  margin-bottom: 10px;
+
+}
+
+.logo-box{
+  width: 80px;
+  height: 50px;
+  margin: auto;
+  border-radius: 20px;
+  background: #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.logo-title{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.logo-subtitle{
+  color: #3b82f6;
+  letter-spacing: 10px;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.heading-section{
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.heading-section h2{
+  font-size: 55px;
+  margin-bottom: 20px;
+}
+
+.heading-section p{
+  color: #9ca3af;
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.register-form{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-box{
+  background: #0b1220;
+  border: 1px solid #1f2937;
+  border-radius: 30px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.input-icon{
+  font-size: 25px;
+  color: #3b82f6;
+}
+
+.input-content{
+  width: 100%;
+}
+
+.input-content label{
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.input-content input{
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #9ca3af;
+  font-size: 18px;
+}
+
+.password-box{
+  display: flex;
+  justify-content: space-between;
+}
+
+.password-left{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.eye-icon{
+  font-size: 35px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.register-btn{
+  width: 100%;
+  border: none;
+  padding: 25px;
+  border-radius: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(to right, #2563eb, #a855f7);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-btn:hover{
+  opacity: 0.9;
+}
+
+.arrow-icon{
+  font-size: 35px;
+}
+
+.footer-text{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.footer-text p{
+  color: #9ca3af;
+  font-size: 22px;
+}
+
+.footer-text span{
+  color: #3b82f6;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+@media(max-width:768px){
+
+  .logo-title{
+    font-size: 20px;
+  }
+
+  .heading-section h2{
+    font-size: 40px;
+  }
+
+  .heading-section p{
+    font-size: 18px;
+  }
+
+  .input-content label{
+    font-size: 16px;
+  }
+
+  .input-content input{
+    font-size: 16px;
+  }
+
+  .register-btn{
+    font-size: 22px;
+  }
+
+}
