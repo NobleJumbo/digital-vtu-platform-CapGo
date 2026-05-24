@@ -8,8 +8,6 @@ import {
   FiEye,
 } from "react-icons/fi";
 
-// import { }from "./Register.css";
-
 function Register() {
   return (
     <div className="register-page">
