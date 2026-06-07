@@ -1,9 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { createUser } = require("../controllers/userController.js");
+const {
+  getProfile,
+  updateProfile,
+} = require("../controllers/userController.js");
 
-// Create user route
-router.post("/register", createUser);
+const {
+  protect,
+} = require("../middleware/authMiddleware");
+
+router.get("/profile", protect, getProfile);
+router.put("/profile", protect, updateProfile);
 
 module.exports = router;

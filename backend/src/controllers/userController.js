@@ -1,44 +1,36 @@
-const { request } = require("express");
-const User = require("../models/User.js");
-const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
-const selectSafeUserFields = "-password";
+const getProfile = async (req, res) => {
+  const user = await User.findById(req.user.id)
+    .select("-password");
 
-const createUser = async (request, res, next) => {
-  try {
-    const { name, email, password } = request.json();
+  res.status(200).json({
+    success: true,
+    user,
+  });
+};
 
-    const existingUser = await User.findOne({ email });
+const updateProfile = async (req, res) => {
+  const { name, phone } = req.body;
 
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User with this email already exists",
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
       name,
-      email,
-      password: hashedPassword,
-    });
+      phone,
+    },
+    {
+      new: true,
+    }
+  ).select("-password");
 
-    const safeUser = await User.findById(user._id).select(
-      selectSafeUserFields
-    );
-
-    return res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      user: safeUser,
-    });
-  } catch (error) {
-    return next(error);
-  }
+  res.status(200).json({
+    success: true,
+    user,
+  });
 };
 
 module.exports = {
-  createUser,
+    getProfile,
+    updateProfile,
 };

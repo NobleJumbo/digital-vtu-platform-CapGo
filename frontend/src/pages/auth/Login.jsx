@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
   FiUser,
@@ -9,36 +9,36 @@ import {
   FiEyeOff,
 } from "react-icons/fi";
 
-import {
-  FaGoogle,
-  FaApple,
-  FaFacebook,
-} from "react-icons/fa";
+// import {
+//   FaGoogle,
+//   FaApple,
+//   FaFacebook,
+// } from "react-icons/fa";
 
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
 
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const togglePassword = () => {
-    setPasswordVisible(!passwordVisible);
+    setPasswordVisible((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-
-    const identifier = form.identifier.value.trim();
-    const password = form.password.value;
-
-    if (!identifier || !password) {
+    if (!identifier.trim() || !password.trim()) {
       return alert("Please fill in all fields");
     }
 
     try {
+      setLoading(true);
+
       const response = await fetch(
         import.meta.env.VITE_API_URL_LOGIN,
         {
@@ -59,15 +59,21 @@ function Login() {
         return alert(data.message || "Login failed");
       }
 
-      console.log("Login successful:", data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
 
-      alert("Login successful!");
+      alert("Login successful");
 
       navigate("/dashboard");
 
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+      console.error("Login Error:", error);
+      alert("Unable to connect to server");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,35 +100,48 @@ function Login() {
         {/* Form */}
         <form className="login-form" onSubmit={handleSubmit}>
 
-          {/* Email / Phone */}
+          {/* Email */}
           <div className="input-box">
             <FiUser className="input-icon" />
 
             <div className="input-content">
-              <label>Email or Phone Number</label>
+              <label>Email or number</label>
 
               <input
                 type="text"
-                name="identifier"
                 placeholder="Enter your email or phone number"
+                value={identifier}
+                onChange={(e) =>
+                  setIdentifier(e.target.value)
+                }
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="input-box password-box">
+
             <div className="password-left">
+
               <FiLock className="input-icon" />
 
               <div className="input-content">
                 <label>Password</label>
 
                 <input
-                  type={passwordVisible ? "text" : "password"}
-                  name="password"
+                  type={
+                    passwordVisible
+                      ? "text"
+                      : "password"
+                  }
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                 />
               </div>
+
             </div>
 
             {passwordVisible ? (
@@ -136,10 +155,12 @@ function Login() {
                 onClick={togglePassword}
               />
             )}
+
           </div>
 
           {/* Options */}
           <div className="login-options">
+
             <div className="remember-me">
               <input type="checkbox" />
               <span>Remember me</span>
@@ -148,39 +169,70 @@ function Login() {
             <p className="forgot-password">
               Forgot Password?
             </p>
+
           </div>
 
           {/* Button */}
-          <button className="login-btn" type="submit">
-            Login <FiArrowRight className="arrow-icon" />
+          <button
+            className="login-btn"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+
+            {!loading && (
+              <FiArrowRight className="arrow-icon" />
+            )}
           </button>
+
         </form>
 
         {/* Divider */}
-        <div className="divider">
-          <div className="line"></div>
-          <p>or continue with</p>
-          <div className="line"></div>
-        </div>
+        {/* <div className="divider">
 
-        {/* Social */}
-        <div className="social-login">
-          <div className="social-box"><FaGoogle /></div>
-          <div className="social-box"><FaApple /></div>
-          <div className="social-box"><FaFacebook /></div>
-        </div>
+          <div className="line"></div>
+
+          <p>or continue with</p>
+
+          <div className="line"></div>
+
+        </div> */}
+
+        {/* Social Login */}
+        {/* <div className="social-login">
+
+          <div className="social-box">
+            <FaGoogle />
+          </div>
+
+          <div className="social-box">
+            <FaApple />
+          </div>
+
+          <div className="social-box">
+            <FaFacebook />
+          </div>
+
+        </div> */}
 
         {/* Footer */}
         <div className="footer-text">
+
           <p>
             Don’t have an account?
+
             <span>
-              <a href="/register"> Register here</a>
+              <Link to="/register">
+                Register here
+              </Link>
             </span>
+
           </p>
+
         </div>
 
       </div>
+
     </div>
   );
 }
