@@ -46,10 +46,11 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            identifier,
-            password,
-          }),
+        body: JSON.stringify({
+  email: identifier,
+  phone: identifier,
+  password,
+})
         }
       );
 

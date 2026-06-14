@@ -1,6 +1,6 @@
 const {
   getVirtualAccountByUser,
-} = require("../services/virtualAccountService");
+} = require("../services/virtualService.js");
 
 const getMyVirtualAccount = async (
   req,

@@ -1,9 +1,14 @@
 const User = require("../models/User");
 
-const adminOnly = async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+const adminOnly = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: "Authentication required",
+    });
+  }
 
-  if (!user || user.role !== "admin") {
+  if (req.user.role !== "admin") {
     return res.status(403).json({
       success: false,
       message: "Admin access only",
@@ -13,4 +18,6 @@ const adminOnly = async (req, res, next) => {
   next();
 };
 
-module.exports = { adminOnly };
+module.exports = {
+  adminOnly,
+};

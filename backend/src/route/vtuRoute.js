@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const { buyAirtime } = require("../controllers/vtuController.js");
+const {  getDataPlans, buyData} = require("../controllers/vtuController.js");
 const { protect } = require("../middleware/authMiddleware.js");
 
-router.post("/airtime", protect, buyAirtime);
-router.post("/data", protect, buyAirtime);
-router.post("/cable", protect, buyAirtime);
-router.post("/electricity", protect, buyAirtime);
+
+
+
+router.get("/data/plans/:network",protect, getDataPlans);
+router.post("/data/buy",protect,buyData);
+
 module.exports = router;

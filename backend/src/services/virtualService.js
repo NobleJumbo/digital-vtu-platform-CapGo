@@ -12,5 +12,5 @@ const getVirtualAccountByUser = async (userId) => {
 
 module.exports = {
   createVirtualAccount,
-  getVirtualAccountByUser,
+  getVirtualAccountByUser
 };

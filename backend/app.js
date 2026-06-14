@@ -8,7 +8,8 @@ const walletRoutes = require("./src/route/walletRoutes.js");
 const paymentRoutes = require("./src/route/paymentRoute.js");
 const vtuRoutes = require("./src/route/vtuRoute.js");
 const virtualAccountRoutes = require("./src/route/virtualRoute.js");
-
+const adminRoutes = require("./src/route/adminRoute.js");
+// const profileController = require("./src/controllers/profileController.js");
 
 
 const app=express();
@@ -24,7 +25,8 @@ app.use("/api/wallet", walletRoutes);
 app.use( "/api/payment", paymentRoutes);
 app.use("/api/vtu", vtuRoutes);
 app.use("/api/virtual-account",virtualAccountRoutes);  
-
+app.use("/api/admin", adminRoutes);
+app.use("/api/profile", profileRoutes);
 
 
 //test route

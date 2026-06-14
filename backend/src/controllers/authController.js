@@ -2,9 +2,7 @@ const User = require("../models/User.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { createWallet } = require("../services/walletService");
-const {
-  createVirtualAccount,
-} = require("../services/virtualAccountService.js");
+const {createVirtualAccount,} = require("../services/virtualService.js");
 const selectSafeUserFields = "-password";
 
 // ==================== REGISTER ====================
@@ -48,16 +46,16 @@ const createUser = async (req, res, next) => {
     try {
       await createWallet(user._id);
       // fake account for now
-    await createVirtualAccount({
-    user: user._id,
-  accountNumber:
-    Math.floor(
-      1000000000 + Math.random() * 9000000000
-    ).toString(),
-  accountName: user.name.toUpperCase(),
-  bankName: "Demo Bank",
-  provider: "LOCAL",
-  providerAccountId: `VA-${Date.now()}`,
+      await createVirtualAccount({
+     user: user._id,
+      accountNumber:
+       Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+        accountName: user.name.toUpperCase(),
+        bankName: "Demo Bank",
+        provider: "LOCAL",
+        providerAccountId: `VA-${Date.now()}`,
+
+  // await createVirtualAccount(user);
 });
 
     } catch (walletError) {
@@ -70,9 +68,7 @@ const createUser = async (req, res, next) => {
       });
     }
 
-    const safeUser = await User.findById(user._id).select(
-      selectSafeUserFields
-    );
+    const safeUser = await User.findById(user._id).select(selectSafeUserFields);
 
     return res.status(201).json({
       success: true,
@@ -86,11 +82,12 @@ const createUser = async (req, res, next) => {
 
 // ==================== LOGIN ====================
 
+
 const loginUser = async (req, res, next) => {
   try {
     const { email, phone, password } = req.body;
 
-    if ((!email && !phone) || !password) {
+    if (!email && !phone) {
       return res.status(400).json({
         success: false,
         message: "Email/phone and password are required",
@@ -110,7 +107,17 @@ const loginUser = async (req, res, next) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Account has been blocked",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
       return res.status(401).json({
@@ -119,22 +126,26 @@ const loginUser = async (req, res, next) => {
       });
     }
 
-    // Access token (short life)
     const accessToken = jwt.sign(
       {
         id: user._id,
+        email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }
+      {
+        expiresIn: "15m",
+      }
     );
 
-    // Refresh token (long life)
     const refreshToken = jwt.sign(
       {
         id: user._id,
       },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
+      {
+        expiresIn: "7d",
+      }
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -153,6 +164,7 @@ const loginUser = async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -160,7 +172,6 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-// ==================== REFRESH TOKEN ====================
 
 const refreshToken = async (req, res) => {
   try {
@@ -173,42 +184,59 @@ const refreshToken = async (req, res) => {
       });
     }
 
-    jwt.verify(
+    const decoded = jwt.verify(
       token,
-      process.env.REFRESH_TOKEN_SECRET,
-      (err, decoded) => {
-        if (err) {
-          return res.status(403).json({
-            success: false,
-            message: "Invalid refresh token",
-          });
-        }
+      process.env.REFRESH_TOKEN_SECRET
+    );
 
-        const accessToken = jwt.sign(
-          { id: decoded.id },
-          process.env.JWT_SECRET,
-          { expiresIn: "15m" }
-        );
+    const user = await User.findById(decoded.id);
 
-        return res.status(200).json({
-          success: true,
-          accessToken,
-        });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({
+        success: false,
+        message: "Account has been blocked",
+      });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "15m",
       }
     );
+
+    return res.status(200).json({
+      success: true,
+      accessToken,
+    });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(403).json({
       success: false,
-      message: error.message,
+      message: "Invalid or expired refresh token",
     });
   }
 };
-
 // ==================== LOGOUT ====================
 
 const logoutUser = async (req, res) => {
   try {
-    res.clearCookie("refreshToken");
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     return res.status(200).json({
       success: true,
@@ -221,7 +249,6 @@ const logoutUser = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   createUser,
   loginUser,
