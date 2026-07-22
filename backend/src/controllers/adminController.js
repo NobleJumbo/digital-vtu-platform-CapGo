@@ -2,7 +2,7 @@ const User = require("../models/User");
 const Wallet = require("../models/Wallet");
 const Transaction = require("../models/Transaction");
 
-//GETTING ALL USERS
+
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-password");
@@ -18,15 +18,10 @@ const getAllUsers = async (req, res, next) => {
 };
 
 // GETTING ALL TRANSACTIONS
-const getAllTransactions = async (req,
-  res,
-  next
-) => {
+const getAllTransactions = async (req,res,next) => {
   try {
     const transactions =
-      await Transaction.find()
-        .populate("user", "name email")
-        .sort({ createdAt: -1 });
+      await Transaction.find().populate("user", "name email").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -78,11 +73,7 @@ const getDashboardStats = async (req,res,next) => {
 
 
 
-const getUserById = async (
-  req,
-  res,
-  next
-) => {
+const getUserById = async (req,res,next) => {
   try {
     const user =
       await User.findById(
@@ -105,11 +96,7 @@ const getUserById = async (
   }
 };
 
-const blockUser = async (
-  req,
-  res,
-  next
-) => {
+const blockUser = async ( req,res,next) => {
   try {
     const user =
       await User.findByIdAndUpdate(
@@ -131,11 +118,7 @@ const blockUser = async (
   }
 };
 
-const unblockUser = async (
-  req,
-  res,
-  next
-) => {
+const unblockUser = async (req,res,next) => {
   try {
     const user =
       await User.findByIdAndUpdate(
@@ -186,25 +169,11 @@ const adminCreditWallet =
   };
 
 
-const createAdmin = async (
-  req,
-  res,
-  next
-) => {
+const createAdmin = async (req,res,next) => {
   try {
-    const {
-      name,
-      email,
-      phone,
-      password,
-    } = req.body;
+    const {name,email,phone,password,} = req.body;
 
-    if (
-      !name ||
-      !email ||
-      !phone ||
-      !password
-    ) {
+    if (!name ||!email ||!phone ||!password) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -265,5 +234,5 @@ module.exports = {
   blockUser,
   unblockUser,
   adminCreditWallet,   
-    createAdmin
+  createAdmin
 };

@@ -18,16 +18,20 @@ const userSchema = new mogoose.Schema({
         type:String,
         required:true,
     },
+    isVerified:{
+     type:Boolean,
+     dafault:false
+    },
     role: {
   type: String,
   enum: ["user","admin"],
   default: "user",
-},
-isBlocked: {
-  type: Boolean,
-  default: false,
-},
-},{timestamps:true}
+    },
+     isBlocked: {
+     type: Boolean,
+     default: false,
+    },
+     },{timestamps:true}
 );
 
 exports = module.exports = mogoose.model("User",userSchema);

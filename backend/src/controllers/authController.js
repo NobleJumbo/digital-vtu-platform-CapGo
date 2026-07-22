@@ -1,9 +1,11 @@
 const User = require("../models/User.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const { createWallet } = require("../services/walletService");
 const {createVirtualAccount,} = require("../services/virtualService.js");
 const selectSafeUserFields = "-password";
+
 
 // ==================== REGISTER ====================
 
@@ -30,6 +32,7 @@ const createUser = async (req, res, next) => {
         message: "Email or phone number already exists",
       });
     }
+const verificationToken = crypto.randomBytes(32).toString("hex");
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,23 +43,29 @@ const createUser = async (req, res, next) => {
       email,
       phone,
       password: hashedPassword,
+      isVerified:false,
+      verificationToken,
     });
+
 
     // ==================== CREATE WALLET ====================
     try {
       await createWallet(user._id);
       // fake account for now
       await createVirtualAccount({
-     user: user._id,
+      user: user._id,
       accountNumber:
        Math.floor(1000000000 + Math.random() * 9000000000).toString(),
         accountName: user.name.toUpperCase(),
         bankName: "Demo Bank",
         provider: "LOCAL",
         providerAccountId: `VA-${Date.now()}`,
+        // await createVirtualAccount(user);
+      
+    });
 
-  // await createVirtualAccount(user);
-});
+
+
 
     } catch (walletError) {
       // rollback user if wallet fails (important for consistency)
@@ -72,13 +81,16 @@ const createUser = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      message: "User created successfully",
+       message:"Registration successful. Please verify your email.",
       user: safeUser,
     });
   } catch (error) {
     next(error);
   }
 };
+
+
+
 
 // ==================== LOGIN ====================
 
@@ -249,9 +261,31 @@ const logoutUser = async (req, res) => {
     });
   }
 };
+
+const forgotPassword = async (req, res, next) => {
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   createUser,
   loginUser,
   refreshToken,
   logoutUser,
+  forgotPassword
 };

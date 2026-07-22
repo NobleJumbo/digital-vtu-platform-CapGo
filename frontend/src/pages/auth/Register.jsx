@@ -135,7 +135,7 @@ function Register() {
           <h1 className="logo-title">CapGo</h1>
 
           <p className="logo-subtitle">
-            PLATFORM
+            PayBills
           </p>
         </div>
 

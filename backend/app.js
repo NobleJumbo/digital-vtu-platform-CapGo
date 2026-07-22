@@ -9,15 +9,14 @@ const paymentRoutes = require("./src/route/paymentRoute.js");
 const vtuRoutes = require("./src/route/vtuRoute.js");
 const virtualAccountRoutes = require("./src/route/virtualRoute.js");
 const adminRoutes = require("./src/route/adminRoute.js");
-// const profileController = require("./src/controllers/profileController.js");
+const cheap = require("./src/route/cheapDataHubRoute.js");
 
 
 const app=express();
-
-//middleware
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
+
 app.use("/api/auth", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/transactions", transactionRoutes);
@@ -27,9 +26,9 @@ app.use("/api/vtu", vtuRoutes);
 app.use("/api/virtual-account",virtualAccountRoutes);  
 app.use("/api/admin", adminRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/cheap", cheap);
 
 
-//test route
 app.get('/', (req, res)=>{
 res.send('api ruuning');
 });

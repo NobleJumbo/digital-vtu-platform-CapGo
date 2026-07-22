@@ -87,8 +87,7 @@ function Navbar() {
         <div className="business-left">
 
           <h2>
-            Create your own VTU Website
-            in 30 seconds!
+            Bill payment made easy  
           </h2>
 
           <div className="laptop-box">

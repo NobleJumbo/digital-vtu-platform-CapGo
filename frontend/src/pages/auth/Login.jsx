@@ -29,55 +29,119 @@ function Login() {
     setPasswordVisible((prev) => !prev);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!identifier.trim() || !password.trim()) {
+  //     return alert("Please fill in all fields");
+  //   }
+
+  //   try {
+  //     setLoading(true);
+
+  //     const response = await fetch(
+  //       import.meta.env.VITE_API_URL_LOGIN,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //            body: JSON.stringify({
+  //            email: identifier,
+  //           phone: identifier,
+  //           password,
+  //         })
+  //       }
+  //     );
+
+  //     const data = await response.json();
+
+  //     if (!response.ok) {
+  //       return alert(data.message || "Login failed");
+  //     }
+
+  //     localStorage.setItem("token", data.token);
+  //     localStorage.setItem(
+  //       "user",
+  //       JSON.stringify(data.user)
+  //     );
+
+  //     alert("Login successful");
+
+  //     navigate("/dashboard");
+
+  //   } catch (error) {
+  //     console.error("Login Error:", error);
+  //     alert("Unable to connect to server");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!identifier.trim() || !password.trim()) {
-      return alert("Please fill in all fields");
-    }
+  if (!identifier.trim() || !password.trim()) {
+    return alert("Please fill in all fields");
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await fetch(
-        import.meta.env.VITE_API_URL_LOGIN,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+    const response = await fetch(
+      import.meta.env.VITE_API_URL_LOGIN,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-  email: identifier,
-  phone: identifier,
-  password,
-})
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return alert(data.message || "Login failed");
+          email: identifier,
+          password,
+        }),
       }
+    );
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
+    const data = await response.json();
+
+    console.log("LOGIN RESPONSE:", data);
+
+    if (!response.ok) {
+      return alert(
+        data.message || "Login failed"
       );
-
-      alert("Login successful");
-
-      navigate("/dashboard");
-
-    } catch (error) {
-      console.error("Login Error:", error);
-      alert("Unable to connect to server");
-    } finally {
-      setLoading(false);
     }
-  };
 
+    // Save JWT token
+    localStorage.setItem(
+      "token",
+      data.accessToken
+    );
+
+    // Save user data
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.user)
+    );
+
+    console.log(
+      "TOKEN SAVED:",
+      data.accessToken
+    );
+
+    alert("Login successful");
+
+    navigate("/dashboard");
+  } catch (error) {
+    console.error(
+      "Login Error:",
+      error
+    );
+    alert("Unable to connect to server");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="login-page">
 
@@ -89,7 +153,7 @@ function Login() {
 
           <h1 className="logo-title">CapGo</h1>
 
-          <p className="logo-subtitle">PLATFORM</p>
+          <p className="logo-subtitle">PayBills</p>
         </div>
 
         {/* Heading */}

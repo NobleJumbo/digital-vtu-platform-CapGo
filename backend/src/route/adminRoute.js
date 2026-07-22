@@ -10,14 +10,10 @@ const {
   blockUser,
   unblockUser,
   adminCreditWallet,
-    createAdmin
-
+  createAdmin
 } = require("../controllers/adminController");
 
-const {
-  protect,
-} = require("../middleware/authMiddleware");
-
+const {protect,} = require("../middleware/authMiddleware");
 const {adminOnly,} = require("../middleware/adminMiddleware");
 
 router.get("/users", protect, adminOnly, getAllUsers);
