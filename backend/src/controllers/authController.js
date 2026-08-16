@@ -32,7 +32,7 @@ const createUser = async (req, res, next) => {
         message: "Email or phone number already exists",
       });
     }
-const verificationToken = crypto.randomBytes(32).toString("hex");
+   const verificationToken = crypto.randomBytes(32).toString("hex");
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
