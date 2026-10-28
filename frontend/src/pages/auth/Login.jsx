@@ -15,7 +15,7 @@ import {
 //   FaFacebook,
 // } from "react-icons/fa";
 
-import "./Login.css";
+import "./login.css";
 
 function Login() {
   const navigate = useNavigate();

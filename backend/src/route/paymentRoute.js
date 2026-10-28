@@ -1,14 +1,32 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+// const router = express.Router();
 
 // const {fundWallet,verifyWalletFunding,} = require("../controllers/paymentController");
-const {initializeServicePayment,} = require("../controllers/paymentControllerBackUp.js");
+// const {initializeServicePayment,} = require("../controllers/paymentControllerBackUp.js");
 
-const {protect,} = require("../middleware/authMiddleware");
+// const {protect,} = require("../middleware/authMiddleware");
 
 // router.post("/fund-wallet",protect,fundWallet);
 // router.get("/verify/:reference",protect,verifyWalletFunding);
 
-router.post("/initialize",protect,initializeServicePayment);
+// router.post("/initialize",protect,initializeServicePayment);
+
+// module.exports = router;
+
+
+const express = require("express");
+const router = express.Router();
+
+const {
+  initializeServicePayment,
+} = require("../controllers/paymentControllerBackUp.js");
+
+const { protect } = require("../middleware/authMiddleware.js");
+
+router.post(
+  "/initialize",
+  protect,
+  initializeServicePayment
+);
 
 module.exports = router;

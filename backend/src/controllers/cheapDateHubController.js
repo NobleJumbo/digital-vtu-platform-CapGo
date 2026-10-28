@@ -1,8 +1,6 @@
 const cheapData = require("../services/cheapDataHubService");
 const { debitWallet } = require("../services/walletService.js");
 
-
-
 const buyAirtime = async (req, res, next) => {
   try {
     const { provider_id, phone_number, amount } = req.body;
@@ -113,4 +111,5 @@ try{
 module.exports = {
   buyAirtime,
   buyData,
+  
 };

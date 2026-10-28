@@ -4,6 +4,7 @@ import Home from "../pages/Home.jsx";
 import Login from "../pages/auth/Login.jsx";
 import Register from "../pages/auth/Register.jsx";
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
+import Data from "../pages/services/Data.jsx";
 // import Transactions from "../pages/transaction/transaction.jsx";
 
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -25,7 +26,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
+<Route path="/data" element={<Data />} />
       {/* <Route
         path="/transactions"
         element={

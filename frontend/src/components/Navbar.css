@@ -1007,12 +1007,13 @@
     display: none;
   }
 
-  .login-btn {
+  .signup-log
+   {
     padding: 9px 10px;
     font-size: 13px;
   }
 
-  .register-btn {
+  .signup-reg {
     padding: 10px 13px;
     font-size: 12px;
   }

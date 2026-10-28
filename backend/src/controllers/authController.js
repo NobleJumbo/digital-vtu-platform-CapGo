@@ -270,18 +270,6 @@ const forgotPassword = async (req, res, next) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = {
   createUser,
   loginUser,

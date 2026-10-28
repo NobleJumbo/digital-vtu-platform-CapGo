@@ -42,6 +42,8 @@ function Dashboard() {
           { headers }
         );
 
+       
+
         setUser(profileRes.data.user);
         setWallet(walletRes.data.wallet);
 
@@ -140,32 +142,46 @@ function Dashboard() {
       </div>
 
       {/* QUICK ACTIONS */}
-      <section>
-        <h3>Quick Actions</h3>
+      {/* QUICK ACTIONS */}
+<section>
+  <h3>Quick Actions</h3>
 
-        <div className="quick-grid">
-          <div className="item">
-            <span>📱</span>
-            <p>Airtime</p>
-          </div>
+  <div className="quick-grid">
 
-          <div className="item">
-            <span>📶</span>
-            <p>Data</p>
-          </div>
+    <div
+      className="item"
+      onClick={() => navigate("/airtime")}
+    >
+      <span>📱</span>
+      <p>Airtime</p>
+    </div>
 
-          <div className="item">
-            <span>📺</span>
-            <p>Cable TV</p>
-          </div>
+    <div
+      className="item"
+      onClick={() => navigate("/data")}
+    >
+      <span>📶</span>
+      <p>Data</p>
+    </div>
 
-          <div className="item">
-            <span>⚡</span>
-            <p>Electricity</p>
-          </div>
-        </div>
-      </section>
+    <div
+      className="item"
+      onClick={() => navigate("/cable")}
+    >
+      <span>📺</span>
+      <p>Cable TV</p>
+    </div>
 
+    <div
+      className="item"
+      onClick={() => navigate("/electricity")}
+    >
+      <span>⚡</span>
+      <p>Electricity</p>
+    </div>
+
+  </div>
+</section>
       {/* SERVICES */}
       <section>
         <h3>Services</h3>
